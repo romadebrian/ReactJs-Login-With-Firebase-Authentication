@@ -1,29 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
 import { auth } from "../../../config/firebase";
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 import "./Header.css";
 
 function Header(props) {
-  // console.log(props);
+  const [user, setUser] = useState({});
+  const [didMount, setDidMount] = useState(true);
+
+  useEffect(() => {
+    // componentDidMount
+    if (didMount) {
+      setDidMount(false);
+    }
+
+    // componentWillUnmount
+    return function cleanup() {
+      setUser("");
+    };
+  }, [didMount]);
+
+  onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser);
+  });
 
   const checkLogin = () => {
-    if (props.user === "") {
+    if (user) {
+      return <button onClick={handleLogout}>Logout</button>;
+    } else {
       return (
         <Link to="/login">
           <button>Login</button>
         </Link>
       );
-    } else {
-      return <button onClick={handleLogout}>Logout</button>;
     }
   };
 
-  const handleLogout = (second) => {
+  const handleLogout = () => {
     signOut(auth);
-    props.SetUserLogout();
   };
 
   return (
@@ -47,16 +62,4 @@ function Header(props) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    SetUserLogout: () => dispatch({ type: "SET_USER", userEmail: "" }),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default Header;
