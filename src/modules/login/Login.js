@@ -22,7 +22,7 @@ function Login(props) {
         console.log("UserId: ", user.uid);
         console.log("Email: ", user.email);
 
-        localStorage.setItem("token", JSON.stringify(user.uid));
+        // localStorage.setItem("token", JSON.stringify(user.uid));
         history("/");
       })
       .catch((error) => {
