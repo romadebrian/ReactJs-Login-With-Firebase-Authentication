@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react"; //rfce
+import React, { useState } from "react"; //rfce
 import { useNavigate } from "react-router-dom";
-
-import { connect } from "react-redux";
 
 import { auth } from "../../config/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -11,20 +9,10 @@ import "./Login.css";
 function Login(props) {
   const history = useNavigate();
 
-  const [isloaded, setLoaded] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
 
-  useEffect(() => {
-    if (isloaded === false) {
-      // console.log(props);
-      setLoaded(true);
-    }
-  }, [isloaded, props]);
-
   const handleLogin = () => {
-    // console.log(user);
-    // const auth = getAuth();
     signInWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         // Signed in
@@ -34,7 +22,6 @@ function Login(props) {
         console.log("UserId: ", user.uid);
         console.log("Email: ", user.email);
 
-        props.handleSetUser(userEmail);
         localStorage.setItem("token", JSON.stringify(user.uid));
         history("/");
       })
@@ -78,16 +65,4 @@ function Login(props) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.user,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    handleSetUser: (value) => dispatch({ type: "SET_USER", userEmail: value }),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;
