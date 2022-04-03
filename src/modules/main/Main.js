@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-
-import { connect } from "react-redux";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { auth } from "../../config/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 import Header from "./header/Header";
 import Footer from "./footer/Footer";
@@ -9,8 +9,24 @@ import Footer from "./footer/Footer";
 import Home from "../../pages/home/Home";
 import NotFound from "../../pages/notfound/NotFound";
 import Profile from "../../pages/profile/Profile";
+import { useSubscribe } from "../../App";
+
+const AuthContextProvider = () => {
+  
+}
+
+const PrivateRoute = ({ component: C, ...props }) => {
+  const { isAuthenticated } = useSubscribe();
+  console.log(isAuthenticated);
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+};
 
 class Main extends Component {
+  componentDidMount() {}
+
+  componentWillUnmount() {}
+
   render() {
     // console.log("Main log", this.props);
     return (
@@ -20,8 +36,10 @@ class Main extends Component {
         <Routes>
           <Route path="/" element={<Home />}></Route>
 
-          {/* <Route exact path="/profile" element={<Profile />} /> */}
-          <Route
+          <Route element={<PrivateRoute />}>
+            <Route exact path="/profile" element={<Profile />} />
+          </Route>
+          {/* <Route
             exact
             path="/profile"
             element={
@@ -29,7 +47,7 @@ class Main extends Component {
                 <Profile />
               </PrivateRoute>
             }
-          />
+          /> */}
 
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -40,27 +58,4 @@ class Main extends Component {
   }
 }
 
-let usernya = "";
-
-const mapStateToProps = (state) => {
-  console.log("log global state", state);
-  usernya = state;
-  return {
-    state,
-  };
-};
-
-function PrivateRoute({ children }) {
-  let user = usernya.user;
-  let location = useLocation();
-
-  // console.log("log B", user);
-  if (!user) {
-    alert("you are not logged in");
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  return children;
-}
-
-export default connect(mapStateToProps)(Main);
+export default Main;
