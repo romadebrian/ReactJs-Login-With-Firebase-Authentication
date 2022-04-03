@@ -1,6 +1,7 @@
 <h1> This example of reactJs login with firebase authentication and PrivateRoute </h1>
 
-#Example account
+# Example account
+
 Email : test.email@yahoo.com
 Password : 123456789
 
