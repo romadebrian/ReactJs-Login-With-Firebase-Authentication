@@ -6,7 +6,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 
 import "./Login.css";
 
-function Login(props) {
+function Login() {
   const history = useNavigate();
 
   const [userEmail, setUserEmail] = useState("");
