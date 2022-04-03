@@ -5,7 +5,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 
 import "./Header.css";
 
-function Header(props) {
+function Header() {
   const [user, setUser] = useState({});
   const [didMount, setDidMount] = useState(true);
 
