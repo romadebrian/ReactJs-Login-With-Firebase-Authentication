@@ -14,7 +14,7 @@ function Profile() {
     });
 
     // componentWillUnmount
-    return () => unsubs;
+    return unsubs;
   });
 
   return (
