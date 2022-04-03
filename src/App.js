@@ -3,36 +3,13 @@ import "./App.css";
 
 import Main from "./modules/main/Main";
 import Login from "./modules/login/Login";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./config/firebase";
 
-let datauser = null;
-
-const subs = onAuthStateChanged(auth, (data) => {
-  datauser = data;
-});
-
-export const useSubscribe = () => {
-  subs();
-  const user = datauser;
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, setUser);
-  //   unsubscribe();
-
-  //   return () => unsubscribe;
-  // }, []);
-
-  console.log("test", user);
-
-  return { isAuthenticated: user != null };
-};
-
-function App() {
+function App(props) {
+  console.log(props);
   return (
     <Router>
       <Routes>
-        <Route path="*" element={<Main />} />
+        <Route path="*" element={<Main dataUserMain={props.dataUser} />} />
 
         <Route exact path="/login" element={<Login />} />
       </Routes>
